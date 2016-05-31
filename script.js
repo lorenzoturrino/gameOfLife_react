@@ -11,8 +11,7 @@ var Grid = React.createClass({
   getInitialState: function() {
     return {gridState: this.createGrid(this.stateBuilder,3)};
   },
-  handleClick: function(xpos, ypos) {
-    console.log("clicking on", xpos, ypos);
+  toggleCellState: function(xpos, ypos) {
     var gridState = this.state.gridState;
     gridState[xpos][ypos] = !gridState[xpos][ypos];
     this.setState({gridState: gridState});
@@ -30,7 +29,7 @@ var Grid = React.createClass({
   },
   stateBuilder: () => true,
   cellBuilder: function(xpos, ypos) {
-    return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.handleClick} xPos={xpos} yPos={ypos}/>);
+    return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.toggleCellState} xPos={xpos} yPos={ypos}/>);
   },
   render: function() {
     return (
@@ -43,23 +42,6 @@ var Grid = React.createClass({
     );
   }
 });
-
-
-// for(var i = 0; i < gridSize; i++) {
-//   var row = [];
-//   for(var j = 0; j < gridSize; j++) {
-//     row.push(<Cell
-//                 alive="true"
-//                 handleClick={this.handleClick}
-//                 xPos={i}
-//                 yPos={j}
-//               />);
-//   }
-//   grid.push(row);
-// }
-/////////////////////
-
-
 
 ReactDOM.render(
   <table className="secondGrind">
