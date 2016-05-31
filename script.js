@@ -1,76 +1,84 @@
 var Cell = React.createClass({
-  getInitialState: function() {
-    return {
-      alive: false
-    };
-  },
   handleClick: function() {
-    this.setState({alive: !this.state.alive});
+    this.props.handleClick(this.props.xPos, this.props.yPos);
   },
   render: function() {
-    // console.log("hi i'm rendering and i'm", this.state);
-  return <td data-alive={this.state.alive} onClick={this.handleClick}>cell proto</td>;
+    return <td data-alive={this.props.alive} onClick={this.handleClick}>Cell!</td>;
   }
 });
 
-var gridSize = 3;
 
-var grid = [];
-for(var i = 0; i < gridSize; i++) {
-  var row = [];
-  for(var j = 0; j < gridSize; j++) {
-    row.push(<Cell key={j}/>);
+function newGridState() {
+  var gridSize = 3;
+  var grid = [];
+  for(var i = 0; i < gridSize; i++) {
+    var row = [];
+    for(var j = 0; j < gridSize; j++) {
+      row.push(false);
+    }
+    grid.push(row);
   }
-  grid.push(<tr key={i}>{row}</tr>);
+  return grid;
 }
 
-ReactDOM.render(
-  <table className="mainGrid">
-    <thead></thead>
-    <tbody>
-        {grid}
-    </tbody>
-  </table>,
-  document.getElementById('grid')
-);
-
-/////////////////////
-
-var CloneCell = React.createClass({
-  handleClick: function() {
-    this.props.callb();
-  },
-  render: function() {
-  return <td data-alive={this.props.viva} onClick={this.handleClick}>cell proto</td>;
-  }
-});
-
-var CloneGrid = React.createClass({
+var Grid = React.createClass({
   getInitialState: function() {
-    return {alive: true};
+    return {cellsAlive: newGridState()};
   },
-  switchState: function () {
-    this.setState({alive: !this.state.alive});
+  handleClick: function(xpos, ypos) {
+    console.log("clicking on", xpos, ypos);
+  },
+  newGridState: function() {
+
+  },
+  buildGrid: function() {
+    var gridSize = 3;
+    var grid = [];
+    for(var i = 0; i < gridSize; i++) {
+      var row = [];
+      for(var j = 0; j < gridSize; j++) {
+        row.push(<Cell
+                    alive={this.state.cellsAlive[i][j]}
+                    handleClick={this.handleClick}
+                    xPos={i}
+                    yPos={j}
+                  />);
+      }
+      grid.push(<tr>{row}</tr>);
+    }
+    return grid;
   },
   render: function() {
+    console.log(this.buildGrid());
     return (
-      <td>
-        <CloneCell viva={this.state.alive} callb={this.switchState}/>
-      </td>
+      <tbody>
+        {this.buildGrid()}
+      </tbody>
     );
   }
 });
 
-console.log(CloneGrid.getInitialState);
-console.log(<CloneGrid />.getInitialState);
+
+// for(var i = 0; i < gridSize; i++) {
+//   var row = [];
+//   for(var j = 0; j < gridSize; j++) {
+//     row.push(<Cell
+//                 alive="true"
+//                 handleClick={this.handleClick}
+//                 xPos={i}
+//                 yPos={j}
+//               />);
+//   }
+//   grid.push(row);
+// }
+/////////////////////
+
 
 
 ReactDOM.render(
   <table className="secondGrind">
     <thead></thead>
-    <tbody>
-        <CloneGrid />
-    </tbody>
+      <Grid />
   </table>,
-  document.getElementById('experiment')
+  document.getElementById('grid')
 );
