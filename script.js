@@ -28,18 +28,16 @@ var Grid = React.createClass({
     }
     return grid;
   },
-  stateBuilder: function() {
-    return true;
-  },
+  stateBuilder: () => true,
   cellBuilder: function(xpos, ypos) {
     return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.handleClick} xPos={xpos} yPos={ypos}/>);
   },
   render: function() {
     return (
       <tbody>
-        {this.createGrid(this.cellBuilder,3).map(function(row) {
-            return <tr>{row}</tr>;
-          })
+        {
+          this.createGrid(this.cellBuilder,3)
+            .map(row => <tr>{row}</tr>)
         }
       </tbody>
     );
