@@ -14,7 +14,11 @@ function newGridState() {
   for(var i = 0; i < gridSize; i++) {
     var row = [];
     for(var j = 0; j < gridSize; j++) {
+      if(j===1 && i===1) {
+        row.push(true);
+      } else {
       row.push(false);
+      }
     }
     grid.push(row);
   }
@@ -23,10 +27,13 @@ function newGridState() {
 
 var Grid = React.createClass({
   getInitialState: function() {
-    return {cellsAlive: newGridState()};
+    return {gridState: newGridState()};
   },
   handleClick: function(xpos, ypos) {
     console.log("clicking on", xpos, ypos);
+    var gridState = this.state.gridState;
+    gridState[xpos][ypos] = !gridState[xpos][ypos];
+    this.setState({gridState: gridState});
   },
   newGridState: function() {
 
@@ -38,7 +45,7 @@ var Grid = React.createClass({
       var row = [];
       for(var j = 0; j < gridSize; j++) {
         row.push(<Cell
-                    alive={this.state.cellsAlive[i][j]}
+                    alive={this.state.gridState[i][j]}
                     handleClick={this.handleClick}
                     xPos={i}
                     yPos={j}
