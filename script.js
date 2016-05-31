@@ -61,6 +61,9 @@ var CloneGrid = React.createClass({
   }
 });
 
+console.log(CloneGrid.getInitialState);
+console.log(<CloneGrid />.getInitialState);
+
 
 ReactDOM.render(
   <table className="secondGrind">
