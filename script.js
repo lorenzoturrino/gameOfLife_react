@@ -7,27 +7,9 @@ var Cell = React.createClass({
   }
 });
 
-
-function newGridState() {
-  var gridSize = 3;
-  var grid = [];
-  for(var i = 0; i < gridSize; i++) {
-    var row = [];
-    for(var j = 0; j < gridSize; j++) {
-      if(j===1 && i===1) {
-        row.push(true);
-      } else {
-      row.push(false);
-      }
-    }
-    grid.push(row);
-  }
-  return grid;
-}
-
 var Grid = React.createClass({
   getInitialState: function() {
-    return {gridState: newGridState()};
+    return {gridState: this.createGrid(this.stateBuilder,3)};
   },
   handleClick: function(xpos, ypos) {
     console.log("clicking on", xpos, ypos);
@@ -35,31 +17,30 @@ var Grid = React.createClass({
     gridState[xpos][ypos] = !gridState[xpos][ypos];
     this.setState({gridState: gridState});
   },
-  newGridState: function() {
-
-  },
-  buildGrid: function() {
-    var gridSize = 3;
+  createGrid: function(buildFunction, gridSize) {
     var grid = [];
     for(var i = 0; i < gridSize; i++) {
       var row = [];
       for(var j = 0; j < gridSize; j++) {
-        row.push(<Cell
-                    alive={this.state.gridState[i][j]}
-                    handleClick={this.handleClick}
-                    xPos={i}
-                    yPos={j}
-                  />);
+        row.push(buildFunction(i,j));
       }
-      grid.push(<tr>{row}</tr>);
+      grid.push(row);
     }
     return grid;
   },
+  stateBuilder: function() {
+    return true;
+  },
+  cellBuilder: function(xpos, ypos) {
+    return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.handleClick} xPos={xpos} yPos={ypos}/>);
+  },
   render: function() {
-    console.log(this.buildGrid());
     return (
       <tbody>
-        {this.buildGrid()}
+        {this.createGrid(this.cellBuilder,3).map(function(row) {
+            return <tr>{row}</tr>;
+          })
+        }
       </tbody>
     );
   }
