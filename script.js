@@ -1,3 +1,5 @@
+var GRIDSIZE = 10;
+
 var Cell = React.createClass({
   handleClick: function() {
     this.props.handleClick(this.props.xPos, this.props.yPos);
@@ -9,7 +11,7 @@ var Cell = React.createClass({
 
 var Grid = React.createClass({
   getInitialState: function() {
-    return {gridState: this.createGrid(this.stateBuilder,3)};
+    return {gridState: this.createGrid(this.stateBuilder)};
   },
   toggleCellState: function(xpos, ypos) {
     var gridState = this.state.gridState;
@@ -25,11 +27,11 @@ var Grid = React.createClass({
     console.log("building stepper");
     var that = this;
     return function(xpos, ypos) {
-      console.log("sum stuff on ", xpos, ypos);
+      // console.log("sum stuff on ", xpos, ypos);
       var sum = 0;
       for(var i = xpos-1; i < xpos+2; i++) {
         for(var j = ypos-1; j < ypos+2; j++) {
-          console.log("checking",i,j);
+          // console.log("checking",i,j);
           if(oldGrid[i] !== undefined && oldGrid[i][j] !== undefined) {
             if(!(i === xpos && j === ypos) && oldGrid[i][j] === true) {
               sum += 1;
@@ -41,7 +43,7 @@ var Grid = React.createClass({
     };
   },
   survivalRules: function(number, state) {
-    console.log("surviving", number, state);
+    // console.log("surviving", number, state);
     if(number === 3 || (state && number === 2)) {
       return true;
     }
@@ -49,13 +51,13 @@ var Grid = React.createClass({
   },
   stepGridState: function() {
     // console.log("stepgrid", this.stepBuilder(this.state.gridState));
-    this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState),3)});
+    this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState))});
   },
-  createGrid: function(buildFunction, gridSize) {
+  createGrid: function(buildFunction) {
     var grid = [];
-    for(var i = 0; i < gridSize; i++) {
+    for(var i = 0; i < GRIDSIZE; i++) {
       var row = [];
-      for(var j = 0; j < gridSize; j++) {
+      for(var j = 0; j < GRIDSIZE; j++) {
         // console.log("gridding", buildFunction);
         row.push(buildFunction(i,j));
       }
@@ -74,7 +76,7 @@ var Grid = React.createClass({
           <thead></thead>
           <tbody>
             {
-              this.createGrid(this.cellBuilder,3)
+              this.createGrid(this.cellBuilder)
                 .map(row => <tr>{row}</tr>)
             }
           </tbody>
