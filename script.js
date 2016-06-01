@@ -23,27 +23,29 @@ var Grid = React.createClass({
   },
   stepBuilder: function(oldGrid) {
     console.log("building stepper");
+    var that = this;
     return function(xpos, ypos) {
-      // console.log("sum stuff");
+      console.log("sum stuff on ", xpos, ypos);
       var sum = 0;
-      for(var i = xpos-1; i < xpos+1; i++) {
-        for(var j = ypos-1; j < ypos+1; j++) {
+      for(var i = xpos-1; i < xpos+2; i++) {
+        for(var j = ypos-1; j < ypos+2; j++) {
+          console.log("checking",i,j);
           if(oldGrid[i] !== undefined && oldGrid[i][j] !== undefined) {
-            if(oldGrid[i][j] === true) {
+            if(!(i === xpos && j === ypos) && oldGrid[i][j] === true) {
               sum += 1;
             }
           }
         }
       }
-      return true;
-      return survivalRules(sum, oldGrid[i][j]);
+      return that.survivalRules(sum, oldGrid[xpos][ypos]);
     };
   },
   survivalRules: function(number, state) {
-    // a < 2 false
-    // a 2,3 true
-    // a > 3 false
-
+    console.log("surviving", number, state);
+    if(number === 3 || (state && number === 2)) {
+      return true;
+    }
+    return false;
   },
   stepGridState: function() {
     // console.log("stepgrid", this.stepBuilder(this.state.gridState));
