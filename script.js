@@ -1,17 +1,21 @@
-var GRIDSIZE = 10;
+var GRIDSIZE = 20;
 
 var Cell = React.createClass({
   handleClick: function() {
     this.props.handleClick(this.props.xPos, this.props.yPos);
   },
   render: function() {
-    return <td data-alive={this.props.alive} onClick={this.handleClick}>Cell!</td>;
+    return <td data-alive={this.props.alive} onClick={this.handleClick}></td>;
   }
 });
 
 var Grid = React.createClass({
   getInitialState: function() {
-    return {gridState: this.createGrid(this.stateBuilder)};
+    return {
+      gridState: this.createGrid(this.stateBuilder),
+      evolving: false,
+      looper: null
+    };
   },
   toggleCellState: function(xpos, ypos) {
     var gridState = this.state.gridState;
@@ -24,7 +28,7 @@ var Grid = React.createClass({
     this.setState({gridState: gridState});
   },
   stepBuilder: function(oldGrid) {
-    console.log("building stepper");
+    // console.log("building stepper");
     var that = this;
     return function(xpos, ypos) {
       // console.log("sum stuff on ", xpos, ypos);
@@ -69,6 +73,14 @@ var Grid = React.createClass({
   cellBuilder: function(xpos, ypos) {
     return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.toggleCellState} xPos={xpos} yPos={ypos}/>);
   },
+  toggleEvolution: function() {
+    if(this.evolving) {
+      clearInterval(this.state.looper);
+    } else {
+      this.state.looper = setInterval(this.stepGridState,200);
+    }
+    this.evolving = !this.evolving;
+  },
   render: function() {
     return (
       <div>
@@ -82,6 +94,7 @@ var Grid = React.createClass({
           </tbody>
         </table>
         <button onClick={this.stepGridState}>Step me</button>
+        <button onClick={this.toggleEvolution}>Toggle Stepping</button>
       </div>
     );
   }
