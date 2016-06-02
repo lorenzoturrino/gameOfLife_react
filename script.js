@@ -74,12 +74,12 @@ var Grid = React.createClass({
     return (<Cell alive={this.state.gridState[xpos][ypos]} handleClick={this.toggleCellState} xPos={xpos} yPos={ypos}/>);
   },
   toggleEvolution: function() {
-    if(this.evolving) {
+    if(this.state.evolving) {
       clearInterval(this.state.looper);
     } else {
       this.state.looper = setInterval(this.stepGridState,150);
     }
-    this.evolving = !this.evolving;
+    this.setState({evolving: !this.state.evolving});
   },
   printLooperStatus: function() {
     if(this.state.evolving) {
