@@ -1,4 +1,4 @@
-var GRIDSIZE = 40;
+var GRIDSIZE = 50;
 
 var Cell = React.createClass({
   handleClick: function() {
@@ -14,7 +14,8 @@ var Grid = React.createClass({
     return {
       gridState: this.createGrid(this.stateBuilder),
       evolving: false,
-      looper: null
+      looper: null,
+      generationNumber: 0
     };
   },
   toggleCellState: function(xpos, ypos) {
@@ -55,10 +56,11 @@ var Grid = React.createClass({
   },
   stepGridState: function() {
     // console.log("stepgrid", this.stepBuilder(this.state.gridState));
-    this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState))});
+    this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState)), generationNumber: this.state.generationNumber + 1});
   },
   clearGrid: function() {
-    this.setState({gridState: this.createGrid(this.stateBuilder),evolving: false});
+    clearInterval(this.state.looper);
+    this.setState({gridState: this.createGrid(this.stateBuilder),evolving: false,generationNumber: 0});
   },
   createGrid: function(buildFunction) {
     var grid = [];
@@ -96,6 +98,7 @@ var Grid = React.createClass({
         <button onClick={this.clearGrid}>Clear Grid</button>
         <button onClick={this.stepGridState}>Single Step</button>
         <button onClick={this.toggleEvolution}>Toggle Stepping</button>
+        <p className="genCounter">Generation number: {this.state.generationNumber}</p>
         <p data-stepping={this.printLooperStatus()}>Auto-Stepping is {this.printLooperStatus()}</p>
         <table className="mainGrid">
           <thead></thead>
