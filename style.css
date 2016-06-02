@@ -1,14 +1,27 @@
+body {
+  background-color: black;
+}
+
 th, td {
-  border: 1px solid;
-  border-collapse: collapse;
   width: 20px;
   height: 20px;
 }
 
 [data-alive="true"] {
-  background-color: seagreen;
+  background-color: lime;
 }
 
 [data-alive="false"] {
-  background-color: purple;
+  background-color: grey;
+}
+
+[data-stepping="ON"] {
+  color: green;
+  font-weight: bolder;
+}
+
+[data-stepping="OFF"] {
+  color: darkred;
+  font-style: italic;
+  font-weight: bold;
 }

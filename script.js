@@ -1,4 +1,4 @@
-var GRIDSIZE = 20;
+var GRIDSIZE = 40;
 
 var Cell = React.createClass({
   handleClick: function() {
@@ -77,14 +77,23 @@ var Grid = React.createClass({
     if(this.evolving) {
       clearInterval(this.state.looper);
     } else {
-      this.state.looper = setInterval(this.stepGridState,200);
+      this.state.looper = setInterval(this.stepGridState,150);
     }
     this.evolving = !this.evolving;
   },
+  printLooperStatus: function() {
+    if(this.state.evolving) {
+      return "ON";
+    }
+    return "OFF";
+  },
   render: function() {
     return (
-      <div>
-        <table className="grinding">
+      <div className="gridGroup">
+        <button onClick={this.stepGridState}>Single Step</button>
+        <button onClick={this.toggleEvolution}>Toggle Stepping</button>
+        <p data-stepping={this.printLooperStatus()}>Auto-Stepping is {this.printLooperStatus()}</p>
+        <table className="mainGrid">
           <thead></thead>
           <tbody>
             {
@@ -93,8 +102,6 @@ var Grid = React.createClass({
             }
           </tbody>
         </table>
-        <button onClick={this.stepGridState}>Step me</button>
-        <button onClick={this.toggleEvolution}>Toggle Stepping</button>
       </div>
     );
   }
