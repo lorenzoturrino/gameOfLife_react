@@ -57,6 +57,9 @@ var Grid = React.createClass({
     // console.log("stepgrid", this.stepBuilder(this.state.gridState));
     this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState))});
   },
+  clearGrid: function() {
+    this.setState({gridState: this.createGrid(this.stateBuilder),evolving: false});
+  },
   createGrid: function(buildFunction) {
     var grid = [];
     for(var i = 0; i < GRIDSIZE; i++) {
@@ -90,6 +93,7 @@ var Grid = React.createClass({
   render: function() {
     return (
       <div className="gridGroup">
+        <button onClick={this.clearGrid}>Clear Grid</button>
         <button onClick={this.stepGridState}>Single Step</button>
         <button onClick={this.toggleEvolution}>Toggle Stepping</button>
         <p data-stepping={this.printLooperStatus()}>Auto-Stepping is {this.printLooperStatus()}</p>
