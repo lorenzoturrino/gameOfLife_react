@@ -1,5 +1,3 @@
-var GRIDSIZE = 50;
-
 var Cell = React.createClass({
   handleClick: function() {
     this.props.handleClick(this.props.xPos, this.props.yPos);
@@ -11,12 +9,16 @@ var Cell = React.createClass({
 
 var Grid = React.createClass({
   getInitialState: function() {
+    console.log("getting initial");
     return {
       gridState: this.createGrid(this.stateBuilder),
       evolving: false,
       looper: null,
       generationNumber: 0
     };
+  },
+  componentWillReceiveProps: function(nextProps) {
+    this.setState
   },
   toggleCellState: function(xpos, ypos) {
     var gridState = this.state.gridState;
@@ -63,10 +65,11 @@ var Grid = React.createClass({
     this.setState({gridState: this.createGrid(this.stateBuilder),evolving: false,generationNumber: 0});
   },
   createGrid: function(buildFunction) {
+    // console.log("creating", this.props);
     var grid = [];
-    for(var i = 0; i < GRIDSIZE; i++) {
+    for(var i = 0; i < this.props.gridSize; i++) {
       var row = [];
-      for(var j = 0; j < GRIDSIZE; j++) {
+      for(var j = 0; j < this.props.gridSize; j++) {
         // console.log("gridding", buildFunction);
         row.push(buildFunction(i,j));
       }
@@ -93,8 +96,10 @@ var Grid = React.createClass({
     return "OFF";
   },
   render: function() {
+    console.log("redering", this.props);
     return (
       <div className="gridGroup">
+        <input type="text" value={this.props.gridSize} onChange={this.props.sizeFunc}/>
         <button onClick={this.clearGrid}>Clear Grid</button>
         <button onClick={this.stepGridState}>Single Step</button>
         <button onClick={this.toggleEvolution}>Toggle Stepping</button>
@@ -114,7 +119,25 @@ var Grid = React.createClass({
   }
 });
 
+
+var GridContainer = React.createClass({
+  getInitialState: function() {
+    return {
+      size: 30
+    };
+  },
+  setSize: function(evt) {
+    this.setState({size: evt.target.value});
+  },
+  render: function() {
+    console.log("render container");
+    return (
+      <Grid key={this.state.size} gridSize={this.state.size} sizeFunc={this.setSize} />
+    );
+  }
+});
+
 ReactDOM.render(
-  <Grid />,
+  <GridContainer />,
   document.getElementById('grid')
 );
