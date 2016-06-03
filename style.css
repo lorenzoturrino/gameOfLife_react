@@ -3,13 +3,18 @@ body {
 }
 
 th, td {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 
-.genCounter {
+.genCounter, .gridSize {
   color: grey;
   font-style: bolder;
+  margin: 10px;
+}
+
+.gridSizeBox {
+  width: 30px;
 }
 
 [data-alive="true"] {

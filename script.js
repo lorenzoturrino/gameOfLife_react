@@ -9,16 +9,12 @@ var Cell = React.createClass({
 
 var Grid = React.createClass({
   getInitialState: function() {
-    console.log("getting initial");
     return {
       gridState: this.createGrid(this.stateBuilder),
       evolving: false,
       looper: null,
       generationNumber: 0
     };
-  },
-  componentWillReceiveProps: function(nextProps) {
-    this.setState
   },
   toggleCellState: function(xpos, ypos) {
     var gridState = this.state.gridState;
@@ -31,14 +27,11 @@ var Grid = React.createClass({
     this.setState({gridState: gridState});
   },
   stepBuilder: function(oldGrid) {
-    // console.log("building stepper");
     var that = this;
     return function(xpos, ypos) {
-      // console.log("sum stuff on ", xpos, ypos);
       var sum = 0;
       for(var i = xpos-1; i < xpos+2; i++) {
         for(var j = ypos-1; j < ypos+2; j++) {
-          // console.log("checking",i,j);
           if(oldGrid[i] !== undefined && oldGrid[i][j] !== undefined) {
             if(!(i === xpos && j === ypos) && oldGrid[i][j] === true) {
               sum += 1;
@@ -50,14 +43,12 @@ var Grid = React.createClass({
     };
   },
   survivalRules: function(number, state) {
-    // console.log("surviving", number, state);
     if(number === 3 || (state && number === 2)) {
       return true;
     }
     return false;
   },
   stepGridState: function() {
-    // console.log("stepgrid", this.stepBuilder(this.state.gridState));
     this.setState({gridState: this.createGrid(this.stepBuilder(this.state.gridState)), generationNumber: this.state.generationNumber + 1});
   },
   clearGrid: function() {
@@ -65,12 +56,10 @@ var Grid = React.createClass({
     this.setState({gridState: this.createGrid(this.stateBuilder),evolving: false,generationNumber: 0});
   },
   createGrid: function(buildFunction) {
-    // console.log("creating", this.props);
     var grid = [];
     for(var i = 0; i < this.props.gridSize; i++) {
       var row = [];
       for(var j = 0; j < this.props.gridSize; j++) {
-        // console.log("gridding", buildFunction);
         row.push(buildFunction(i,j));
       }
       grid.push(row);
@@ -95,14 +84,18 @@ var Grid = React.createClass({
     }
     return "OFF";
   },
+  componentWillUnmount: function() {
+    clearInterval(this.state.looper);
+  },
   render: function() {
-    console.log("redering", this.props);
     return (
       <div className="gridGroup">
-        <input type="text" value={this.props.gridSize} onChange={this.props.sizeFunc}/>
         <button onClick={this.clearGrid}>Clear Grid</button>
         <button onClick={this.stepGridState}>Single Step</button>
         <button onClick={this.toggleEvolution}>Toggle Stepping</button>
+        <div className="gridSize">
+          Grid size: <input className="gridSizeBox" type="text" value={this.props.gridSize} onChange={this.props.sizeFunc}/>
+        </div>
         <p className="genCounter">Generation number: {this.state.generationNumber}</p>
         <p data-stepping={this.printLooperStatus()}>Auto-Stepping is {this.printLooperStatus()}</p>
         <table className="mainGrid">
@@ -130,7 +123,6 @@ var GridContainer = React.createClass({
     this.setState({size: evt.target.value});
   },
   render: function() {
-    console.log("render container");
     return (
       <Grid key={this.state.size} gridSize={this.state.size} sizeFunc={this.setSize} />
     );
